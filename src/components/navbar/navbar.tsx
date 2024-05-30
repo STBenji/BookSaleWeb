@@ -6,7 +6,7 @@ export const NavbarComponent = () => {
 
   const menuItems = [
     { name: 'Libros', link: '/dashboard' },
-    { name: 'Configuracion', link: '/settings' },
+    // { name: 'Configuracion', link: '/settings' },
   ]
   return (
     <Navbar onMenuOpenChange={setIsMenuOpen}>
@@ -23,11 +23,11 @@ export const NavbarComponent = () => {
             Libros
           </Link>
         </NavbarItem>
-        <NavbarItem>
+        {/* <NavbarItem>
           <Link href="/settings" color="foreground" aria-current="page">
             Configuración
           </Link>
-        </NavbarItem>
+        </NavbarItem> */}
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem>
