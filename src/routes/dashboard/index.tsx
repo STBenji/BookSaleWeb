@@ -1,7 +1,7 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { Button, Card, CardHeader, CardFooter, Image, Pagination, Spinner, Link } from '@nextui-org/react'
 import { NavbarComponent } from '../../components/navbar/navbar'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ModalComponent } from '../../components/modal/modal'
 import { useGetBooks } from '../../customHooks/useGetBooks'
 import { ModalCreateBook } from '../../components/modal/modalCreateBook'
@@ -17,9 +17,11 @@ function Dashboard() {
   const [isOpen, setIsOpen] = useState<Boolean>(false)
   const [isOpenBook, setIsOpenBook] = useState<Boolean>(false)
   const [idBook, setIdBook] = useState<number>(0)
-  const { data, loading, error, fetchData } = useGetBooks()
+  const [counter, setCounter] = useState(3)
 
+  const { data, loading, error, fetchData } = useGetBooks()
   const { deleteBook } = useDeleteBook()
+  const navigate = useNavigate()
 
   const modalEdit = () => {
     setIsOpen(!isOpen)
@@ -36,6 +38,25 @@ function Dashboard() {
 
   const itemsPerPage = 4
 
+  useEffect(() => {
+    if (error) {
+      const countdown = setInterval(() => {
+        setCounter((prevCounter) => prevCounter - 1)
+      }, 1000)
+
+      const timeout = setTimeout(() => {
+        navigate({
+          to: '/',
+        })
+      }, 3000)
+
+      return () => {
+        clearInterval(countdown)
+        clearTimeout(timeout)
+      }
+    }
+  }, [error, navigate])
+
   if (loading) {
     return (
       <div className="grid h-screen gap-4 place-content-center">
@@ -47,11 +68,12 @@ function Dashboard() {
 
   if (error) {
     return (
-      <div className="grid h-screen gap-2 place-content-center">
+      <div className="grid h-screen gap-2 px-12 text-center place-content-center">
         <h2 className="text-2xl font-bold">Error: {error}</h2>
         <Button variant="bordered" color="secondary" as={Link} href="/">
           Volver al inicio de sesión
         </Button>
+        <p>Serás redireccionado al login en: {counter}</p>
       </div>
     )
   }
