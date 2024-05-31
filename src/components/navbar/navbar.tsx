@@ -4,10 +4,24 @@ import { useState } from 'react'
 export const NavbarComponent = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  const menuItems = [
-    { name: 'Libros', link: '/dashboard' },
-    // { name: 'Configuracion', link: '/settings' },
-  ]
+  const menuItems = [{ name: 'Libros', link: '/dashboard' }]
+
+  const url = 'http://localhost:5096/api/Auth/signOut'
+
+  const logOut = async () => {
+    try {
+      await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <Navbar onMenuOpenChange={setIsMenuOpen}>
       <NavbarContent>
@@ -23,15 +37,10 @@ export const NavbarComponent = () => {
             Libros
           </Link>
         </NavbarItem>
-        {/* <NavbarItem>
-          <Link href="/settings" color="foreground" aria-current="page">
-            Configuración
-          </Link>
-        </NavbarItem> */}
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem>
-          <Button as={Link} color="secondary" href="/" variant="flat">
+          <Button as={Link} color="secondary" href="/" variant="flat" onClick={logOut}>
             Cerrar sesión
           </Button>
         </NavbarItem>
