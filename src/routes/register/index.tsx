@@ -70,8 +70,8 @@ function Register() {
         <h2 className="text-3xl font-bold mb-14 text-secondary md:min-w-[28rem]">Nos alegra que te quieras unir :)</h2>
         <form action="POST" className="grid gap-4" onSubmit={registerFetch}>
           <Input placeholder="Ingrese el correo" name="email" type="email" autoCapitalize="off" onChange={(e) => setEmail(e.target.value)}></Input>
-          <Input placeholder="Ingrese la contraseña" name="password" type={isVisible ? 'text' : 'password'} autoCapitalize="off" onChange={(e) => setPassword(e.target.value)} endContent={<Image src="eye.svg" onClick={toggleVisibility} />}></Input>
-          <Input placeholder="Confirme la contraseña" name="password" type={isVisible ? 'text' : 'password'} autoCapitalize="off" onChange={(e) => setConfirmPassword(e.target.value)} endContent={<Image src="eye.svg" onClick={toggleVisibility} />}></Input>
+          <Input placeholder="Ingrese la contraseña" name="password" type={isVisible ? 'text' : 'password'} autoCapitalize="off" onChange={(e) => setPassword(e.target.value)} endContent={<Image className='cursor-pointer' src="eye.svg" onClick={toggleVisibility} />}></Input>
+          <Input placeholder="Confirme la contraseña" name="password" type={isVisible ? 'text' : 'password'} autoCapitalize="off" onChange={(e) => setConfirmPassword(e.target.value)} endContent={<Image className='cursor-pointer' src="eye.svg" onClick={toggleVisibility} />}></Input>
 
           <Button color="secondary" onClick={registerFetch}>
             Registrate

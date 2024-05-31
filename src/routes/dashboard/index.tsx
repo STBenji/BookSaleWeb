@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { Button, Card, CardHeader, CardFooter, Image, Pagination, Spinner, Link } from '@nextui-org/react'
+import { Button, Card, CardHeader, CardFooter, Image, Pagination, Spinner, Link, Input } from '@nextui-org/react'
 import { NavbarComponent } from '../../components/navbar/navbar'
 import { useEffect, useState } from 'react'
 import { ModalComponent } from '../../components/modal/modal'
@@ -18,6 +18,7 @@ function Dashboard() {
   const [isOpenBook, setIsOpenBook] = useState<Boolean>(false)
   const [idBook, setIdBook] = useState<number>(0)
   const [counter, setCounter] = useState(3)
+  const [searchTerm, setSearchTerm] = useState<string>('') // Estado para el valor del input
 
   const { data, loading, error, fetchData } = useGetBooks()
   const { deleteBook } = useDeleteBook()
@@ -34,6 +35,10 @@ function Dashboard() {
 
   const modalCreateBook = () => {
     setIsOpenBook(!isOpenBook)
+  }
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value)
   }
 
   const itemsPerPage = 4
@@ -78,8 +83,10 @@ function Dashboard() {
     )
   }
 
+  const filteredBooks = data.filter((book) => book.title.toLowerCase().includes(searchTerm.toLowerCase()))
+
   const startIndex = (currentPage - 1) * itemsPerPage
-  const visibleBooks = data.slice(startIndex, startIndex + itemsPerPage)
+  const visibleBooks = filteredBooks.slice(startIndex, startIndex + itemsPerPage)
 
   const deleteBookId = (id: number) => {
     Swal.fire({
@@ -103,11 +110,14 @@ function Dashboard() {
       <NavbarComponent />
       {isOpen && <ModalComponent cerrarModal={modalEdit} idBook={idBook} fetchData={fetchData} />}
       {isOpenBook && <ModalCreateBook cerrarModal={modalCreateBook} fetchData={fetchData} />}
-      <div className="flex justify-around mt-10">
+      <div className="flex flex-col justify-around gap-4 px-8 mt-10 md:flex-row md:px-0">
         <h2 className="text-2xl font-bold">Tus libros</h2>
-        <Button color="secondary" onClick={modalCreateBook}>
-          Crear libro
-        </Button>
+        <div className="flex gap-3">
+          <Button color="secondary" onClick={modalCreateBook}>
+            Crear libro
+          </Button>
+          <Input type="text" placeholder="Buscar por título" value={searchTerm} onChange={handleSearchChange} />
+        </div>
       </div>
       <section className="flex flex-wrap items-center justify-center gap-3 mb-12 p-7 md:mb-0">
         {visibleBooks.map((item) => (
@@ -146,12 +156,12 @@ function Dashboard() {
         <div className="flex items-center justify-center">
           <div className="flex flex-col items-center gap-5">
             <p className="text-white sm:text-black">Página actual: {currentPage}</p>
-            <Pagination total={Math.ceil(data.length / itemsPerPage)} color="secondary" page={currentPage} onChange={setCurrentPage} />
+            <Pagination total={Math.ceil(filteredBooks.length / itemsPerPage)} color="secondary" page={currentPage} onChange={setCurrentPage} />
             <div className="flex gap-2">
               <Button size="sm" variant="bordered" color="secondary" onClick={() => setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev))}>
                 Anterior
               </Button>
-              <Button size="sm" variant="bordered" color="secondary" onClick={() => setCurrentPage((prev) => (prev < Math.ceil(data.length / itemsPerPage) ? prev + 1 : prev))}>
+              <Button size="sm" variant="bordered" color="secondary" onClick={() => setCurrentPage((prev) => (prev < Math.ceil(filteredBooks.length / itemsPerPage) ? prev + 1 : prev))}>
                 Siguiente
               </Button>
             </div>
