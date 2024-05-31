@@ -1,4 +1,4 @@
-import { Button, Input, Link } from '@nextui-org/react'
+import { Button, Input, Link, Image } from '@nextui-org/react'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { Toaster, toast } from 'sonner'
@@ -12,6 +12,10 @@ const url = 'http://localhost:5096/login?useCookies=true&useSessionCookies=true'
 function Page() {
   const [email, setEmail] = useState<string | null>('')
   const [password, setPassword] = useState<string | null>('')
+
+  const [isVisible, setIsVisible] = useState(false)
+
+  const toggleVisibility = () => setIsVisible(!isVisible)
 
   const navigate = useNavigate()
 
@@ -62,7 +66,7 @@ function Page() {
         <h2 className="text-3xl font-bold mb-14 text-secondary md:min-w-[28rem]">Bienvenido a CBook</h2>
         <form action="POST" className="grid gap-4" onSubmit={loginFetch}>
           <Input placeholder="Ingrese el correo" name="email" type="email" autoCapitalize="off" onChange={(e) => setEmail(e.target.value)}></Input>
-          <Input placeholder="Ingrese la contraseña" name="password" type="password" autoCapitalize="off" onChange={(e) => setPassword(e.target.value)}></Input>
+          <Input placeholder="Ingrese la contraseña" name="password" type={isVisible ? 'text' : 'password'} autoCapitalize="off" onChange={(e) => setPassword(e.target.value)} endContent={<Image src="eye.svg" onClick={toggleVisibility} />}></Input>
 
           <Button color="secondary" onClick={loginFetch}>
             Iniciar sesión

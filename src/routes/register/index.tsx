@@ -1,4 +1,4 @@
-import { Button, Input, Link } from '@nextui-org/react'
+import { Button, Image, Input, Link } from '@nextui-org/react'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { Toaster, toast } from 'sonner'
@@ -13,6 +13,10 @@ function Register() {
   const [email, setEmail] = useState<string | null>('')
   const [password, setPassword] = useState<string | null>('')
   const [confirmPassword, setConfirmPassword] = useState<string | null>('')
+
+  const [isVisible, setIsVisible] = useState(false)
+
+  const toggleVisibility = () => setIsVisible(!isVisible)
 
   const navigate = useNavigate()
 
@@ -66,8 +70,8 @@ function Register() {
         <h2 className="text-3xl font-bold mb-14 text-secondary md:min-w-[28rem]">Nos alegra que te quieras unir :)</h2>
         <form action="POST" className="grid gap-4" onSubmit={registerFetch}>
           <Input placeholder="Ingrese el correo" name="email" type="email" autoCapitalize="off" onChange={(e) => setEmail(e.target.value)}></Input>
-          <Input placeholder="Ingrese la contraseña" name="password" type="password" autoCapitalize="off" onChange={(e) => setPassword(e.target.value)}></Input>
-          <Input placeholder="Confirme la contraseña" name="password" type="password" autoCapitalize="off" onChange={(e) => setConfirmPassword(e.target.value)}></Input>
+          <Input placeholder="Ingrese la contraseña" name="password" type={isVisible ? 'text' : 'password'} autoCapitalize="off" onChange={(e) => setPassword(e.target.value)} endContent={<Image src="eye.svg" onClick={toggleVisibility} />}></Input>
+          <Input placeholder="Confirme la contraseña" name="password" type={isVisible ? 'text' : 'password'} autoCapitalize="off" onChange={(e) => setConfirmPassword(e.target.value)} endContent={<Image src="eye.svg" onClick={toggleVisibility} />}></Input>
 
           <Button color="secondary" onClick={registerFetch}>
             Registrate
