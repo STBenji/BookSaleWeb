@@ -11,7 +11,7 @@ Este proyecto es un proyecto desarrollado con el fin de consumir una REST FULL A
 Sigue estos pasos para instalar y ejecutar el proyecto en tu entorno local:
 
 ```bash
-git clone https://github.com/STBenji/Prueba_Tecnica_BikLeek.git
+git clone https://github.com/STBenji/BookSaleWeb.git
 cd Prueba_Tecnica_BikLeek
 npm install
 pnpm install
